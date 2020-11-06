@@ -70,31 +70,106 @@ class BinarySearchTree {
     }
   }
 
+  /* BFS
+  */
+  public horizontalSearch(callback: Function) {
+    const inbox = [];
+    // first push the top node
+    if (this.top !== null) {
+      inbox.push(this.top);
+    }
+
+    /* gather both children. put them in the work queue
+      process the current item's value with the callback
+      discard the current item
+    */
+    while (inbox.length > 0) {
+      const targetItem: SingleNode = inbox[0];
+      if (targetItem?.leftChild !== null) { inbox.push(targetItem.leftChild); }
+      if (targetItem?.rightChild !== null) { inbox.push(targetItem.rightChild); }
+
+      callback(targetItem.value);
+      console.log(inbox);
+      inbox.shift();
+    }
+  }
+
+  dfsPreOrder() {
+    const results: number[] = [];
+
+    function traverse(targetNode: SingleNode) {
+      // capture/print the current node first
+      results.push(targetNode.value);
+
+      // keep traversing with a left bias
+      if (targetNode.leftChild !== null) { traverse(targetNode.leftChild); }
+      if (targetNode.rightChild !== null) { traverse(targetNode.rightChild);}
+    }
+
+    // start on the root node
+    traverse(this.top!);
+
+    console.log(results);
+    return results;
+  }
+
+  dfsPostOrder() {
+    const results: number[] = [];
+
+    function traverse(targetNode: SingleNode) {
+      // keep traversing with a left bias
+      if (targetNode.leftChild !== null) { traverse(targetNode.leftChild); }
+      if (targetNode.rightChild !== null) { traverse(targetNode.rightChild);}
+
+      // capture/print the current node
+      results.push(targetNode.value);
+    }
+
+    // start on the root node
+    traverse(this.top!);
+
+    console.log(results);
+    return results;
+  }
+
+  dfsInOrder() {
+    const results: number[] = [];
+
+    function traverse(targetNode: SingleNode) {
+      // keep traversing with a left bias
+      if (targetNode.leftChild !== null) { traverse(targetNode.leftChild); }
+
+      // capture/print the current node
+      results.push(targetNode.value);
+
+      if (targetNode.rightChild !== null) { traverse(targetNode.rightChild);}
+    }
+
+    // start on the root node
+    traverse(this.top!);
+
+    console.log(results);
+    return results;
+  }
 }
 
 const tree = new BinarySearchTree();
 const updatedTeee = tree
-  .insert(20)
-  .insert(12)
-  .insert(64)
-  .insert(2)
-  .insert(26)
+  .insert(10)
+  .insert(6)
+  .insert(15)
+  .insert(3)
   .insert(8)
-  .insert(22)
-  .insert(44)
-  .insert(68)
-  .insert(666)
-  .insert(2) 
+  .insert(20)
 
-console.log('updatedTree', updatedTeee);
+// console.log('updatedTree', updatedTeee);
 
-const matchFound: boolean = updatedTeee.find(22);
-const matchFound2: boolean = updatedTeee.find(224);
-console.log('matchFound', matchFound);
-console.log('matchFound2', matchFound2);
+// const matchFound: boolean = updatedTeee.find(22);
+// const matchFound2: boolean = updatedTeee.find(224);
+// console.log('matchFound', matchFound);
+// console.log('matchFound2', matchFound2);
 
+// const bfsPrintOut = updatedTeee.horizontalSearch(console.log);
 
-  // console.log(
-  //   util.inspect(updatedTeee, { showHidden: false, depth: null })
-  // );
-
+// has internal console.log of final result
+updatedTeee.dfsInOrder();
